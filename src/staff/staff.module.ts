@@ -11,6 +11,7 @@ import { Staff, StaffSchema } from './model/staff.schema';
     }])
   ],
   providers: [StaffService],
-  controllers: [StaffController]
+  controllers: [StaffController],
+  exports: [StaffService]
 })
 export class StaffModule {}

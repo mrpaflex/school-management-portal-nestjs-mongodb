@@ -4,6 +4,7 @@ import { Staff } from './model/staff.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UpdateStaffDto } from './dto/update.staff.dtp';
+import { hashed } from 'src/auth/hashed/password.hashed';
 
 @Injectable()
 export class StaffService {
@@ -16,10 +17,12 @@ async createaccount(input: StaffDto) {
         throw new HttpException('you are a staff already', HttpStatus.UNPROCESSABLE_ENTITY)
     }
 
+    input.password = await hashed(input.password)
+
     const createStaff = await this.staffModel.create({
         ...input
     })
-
+    
     await createStaff.save()
 
     return createStaff
@@ -40,6 +43,12 @@ async createaccount(input: StaffDto) {
 
   async findOneStaff(id: string) {
    return await this.staffModel.findById(id).exec()
+
+}
+
+async findStaffByEmail(email: string) {
+    return await this.staffModel.findOne({email: email}).exec()
+
 }
 
 }
