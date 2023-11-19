@@ -8,7 +8,7 @@ export enum Class{
     "SS3"="SS3"
 }
 
-export enum Level{
+export enum Leveled{
     "JUNIOR"= "JUNIOR SECONDARY",
     "SENIOR"= "SENIOR SECONDARY"
 }

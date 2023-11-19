@@ -31,12 +31,11 @@ async singinStaff(body: StaffLoginDto) {
     const payload = {
        //user
        user: user._id
-      //  staff: staff._id
 
     }
     
     return {
-        accessToken: this.jwtService.sign(payload)
+        accessToken: await this.jwtService.signAsync(payload)
     }
 }
 
@@ -45,11 +44,6 @@ async generateJwt(id: string){
    //console.log(user)
    return user;
 }
-// async generateJwt(id: string){
-//     console.log(id)
-//     const user = await this.staffModel.findOne({_id: id}).exec()
-//     //console.log(user)
-//     return user;
-//  }
+
 
 }
