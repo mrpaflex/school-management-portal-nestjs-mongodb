@@ -18,11 +18,11 @@ import { Staff, StaffSchema } from 'src/staff/model/staff.schema';
       imports: [ConfigModule],
       useFactory: async (configService:ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
-        signOptions: {expiresIn: '20m'}
+        signOptions: {expiresIn: '20s'}
       }),
       inject: [ConfigService],
     }), 
-    MongooseModule.forFeature([{name: Staff.name, schema: StaffSchema}])
+   
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, JwtAuthGuard, ConfigService],
