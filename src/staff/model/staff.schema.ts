@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Document} from "mongoose";
 import { Gender, StaffEnum } from "../enum/staff.enum";
 
-export type StaffDocument = HydratedDocument<Staff>
+//export type StaffDocument = HydratedDocument<Staff>
 @Schema()
-export class Staff {
+export class Staff extends Document {
     @Prop()
     firstName: string;
 
@@ -34,6 +34,9 @@ export class Staff {
 
     @Prop({type: Boolean, default: false})
     sacked: boolean
+
+    @Prop({type: Boolean, default: false})
+    suspended: boolean
 
 }
 
