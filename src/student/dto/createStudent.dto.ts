@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString } from "class-validator"
-import { Class, Gender, Leveled } from "../enum/classes.enum"
+import { Class, Gender, MyLeveled } from "../enum/classes.enum"
 
 export class CreateStudentDTO{
     @IsNotEmpty()
@@ -17,15 +17,20 @@ export class CreateStudentDTO{
 
     @IsNotEmpty()
     dateOfBirth: string
+
+    studentReg: string;
+
     @IsNotEmpty()
     age: number
+
     @IsString()
     gender: Gender
+
     @IsString()
     @IsNotEmpty()
     class: Class
-    @IsString()
+
     @IsNotEmpty()
-    level: Leveled
+    leveled: string
 
 }

@@ -8,12 +8,15 @@ export enum Class{
     "SS3"="SS3"
 }
 
-export enum Leveled{
-    "JUNIOR"= "JUNIOR SECONDARY",
-    "SENIOR"= "SENIOR SECONDARY"
-}
+
 
 export enum Gender{
     "FEMALE"="FEMALE",
-    "MALE"="MALE"
+    "MALE"="MALE",
+}
+
+
+export enum MyLeveled{
+    "JUNIOR"= "JUNIOR SECONDARY",
+    "SENIOR"= "SENIOR SECONDARY"
 }

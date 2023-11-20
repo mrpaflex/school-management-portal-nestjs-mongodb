@@ -5,10 +5,13 @@ import { Student } from './model/student.schema';
 import { Model } from 'mongoose';
 import { authGeneratePassword } from './authpassword/password.auth';
 import { hashed } from 'src/auth/hashed/password.hashed';
+import { generateRandomCode } from 'src/common/regno/student.reg';
 
 
 @Injectable()
 export class StudentService {
+
+
     constructor(@InjectModel(Student.name)
     private studentModel: Model<Student>
     ){}
@@ -20,6 +23,8 @@ export class StudentService {
             throw new HttpException('your have account already', HttpStatus.UNPROCESSABLE_ENTITY)
         }
 
+        input.studentReg = await generateRandomCode(input.leveled)
+        console.log(input.studentReg)
         input.password = await authGeneratePassword()
         console.log(input.password)
 
@@ -30,4 +35,14 @@ export class StudentService {
 
         return createStudentAccount.save()
     }
+
+   async findallstudent() {
+    return await this.studentModel.find()
+    }
+    async studentSuspended() {
+        return await this.studentModel.find({
+            suspended: true
+        })
+    }
+
 }

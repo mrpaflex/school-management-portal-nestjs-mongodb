@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
-import { Class, Gender, Leveled } from "../enum/classes.enum";
+import { Class, Gender, MyLeveled } from "../enum/classes.enum";
 
 @Schema()
 export class Student extends Document{
@@ -29,11 +29,14 @@ export class Student extends Document{
     @Prop({type: String, enum: Gender})
     gender: Gender
 
-    @Prop({ type: String, enum: Class})
-    class: Class
+    @Prop()
+    studentReg: string;
 
-    @Prop({type: String, enum: Leveled})
-    level: Leveled
+    @Prop({ type: String, enum: Class})
+    class: Class;
+
+    @Prop()
+    leveled: string;
 
     @Prop({default: false, type: Boolean})
     schoolFees: boolean
