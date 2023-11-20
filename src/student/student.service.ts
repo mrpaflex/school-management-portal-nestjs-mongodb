@@ -49,7 +49,6 @@ export class StudentService {
     }
 
     async findOneStudentByReNo(regno: string) {
-        console.log(regno)
        const student= await this.studentModel.findOne({
         studentReg: regno
        }).exec()
@@ -62,6 +61,7 @@ export class StudentService {
         schoolFees: false,
         finished: false
      })
+     return studentwithfees;
     }
 
     async studentsPaidFees() {
@@ -69,6 +69,7 @@ export class StudentService {
         schoolFees: true,
         finished: false
        })
+       return nofeesStudents;
     }
 
     async studentFinishedWithFees() {
@@ -76,10 +77,18 @@ export class StudentService {
         finished: true,
         schoolFees: false
        }) 
+
+       return finishedStudents;
     }
 
-    async updateStudentsProfile(regno: string, body: UpdateDTO) {
-        const student = await this.studentModel.findByIdAndUpdate({regno}, {body})
+    // async updateStudentsProfile(_id: string, body: UpdateDTO) {
+    //     const student = await this.studentModel.findByIdAndUpdate({_id}, {$set: body})
+    //     return student
+    // }
+
+    async updateStudentsProfile(_id: string, body: UpdateDTO) {
+        const student = await this.studentModel.findByIdAndUpdate({_id}, {$set: body})
+        return student
     }
 
     async findOneStudentByRegNoOrEmail(emailOrRegNo: string) {
@@ -91,4 +100,7 @@ export class StudentService {
         }).exec();
       }
       
+      async findStudentById(id: string){
+        return await this.studentModel.findById(id)
+      }
 }

@@ -8,7 +8,6 @@ import { StudentLoginDTO } from 'src/student/dto/login.student.dto';
 
 @Controller('auth')
 export class AuthController {
-
     constructor(
         private authservice: AuthService
 ){}

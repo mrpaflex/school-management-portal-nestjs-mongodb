@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { CreateStudentDTO } from './dto/createStudent.dto';
 import { UpdateDTO } from './dto/update.student.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
+import { GetUser } from 'src/common/decorator/custom.decorator';
+import { Student } from './model/student.schema';
 
 @Controller('student')
 export class StudentController {
@@ -43,8 +46,14 @@ export class StudentController {
         return await this.studentService.studentFinishedWithFees()
     }
 
-    @Put()
-    async updateProfile(@Param('regno') regno: string, @Body() body: UpdateDTO){
-        return await this.studentService.updateStudentsProfile(regno, body)
+    // @Put('update/:id')
+    // async updateProfile( @Param('id') _id: string, @Body() body: UpdateDTO){
+    //     return await this.studentService.updateStudentsProfile(_id, body)
+    // }
+
+    @Put('update')
+    @UseGuards(JwtAuthGuard)
+    async updateProfile( @GetUser() input: Student,  @Body() body: UpdateDTO){
+        return await this.studentService.updateStudentsProfile(input._id, body)
     }
 }

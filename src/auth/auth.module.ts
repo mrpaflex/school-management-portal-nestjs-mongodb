@@ -7,8 +7,6 @@ import { StaffService } from 'src/staff/staff.service';
 import { StaffModule } from 'src/staff/staff.module';
 import { JwtStrategy } from './strategy/jwt.stragy';
 import { JwtAuthGuard } from './guards/jwt.guards';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Staff, StaffSchema } from 'src/staff/model/staff.schema';
 import { StudentModule } from 'src/student/student.module';
 
 @Module({
@@ -20,7 +18,7 @@ import { StudentModule } from 'src/student/student.module';
       imports: [ConfigModule],
       useFactory: async (configService:ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
-        signOptions: {expiresIn: '20s'}
+        signOptions: {expiresIn: '2m'}
       }),
       inject: [ConfigService],
     }), 

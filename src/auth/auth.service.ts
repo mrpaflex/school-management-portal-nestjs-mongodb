@@ -54,16 +54,25 @@ async loginStudent(body: StudentLoginDTO) {
         throw new HttpException('check your password and email', HttpStatus.UNPROCESSABLE_ENTITY)
 
     }
-    return user;
+   const payload = {
+    user: user._id
+   }
+
+   return {
+    accessToken: await this.jwtService.signAsync(payload)
+   }
 
 }
-
 
 async generateJwt(id: string){
-   const user = await this.staffService.findOneStaff(id)
-   //console.log(user)
-   return user;
+   const staff = await this.staffService.findOneStaff(id)
+   const student = await this.studentService.findStudentById(id)
+
+   if (staff) {
+    return staff;
+   }
+   if (student) {
+    return student
+   } 
 }
-
-
 }
