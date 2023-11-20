@@ -9,9 +9,11 @@ import { JwtStrategy } from './strategy/jwt.stragy';
 import { JwtAuthGuard } from './guards/jwt.guards';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Staff, StaffSchema } from 'src/staff/model/staff.schema';
+import { StudentModule } from 'src/student/student.module';
 
 @Module({
   imports: [
+    StudentModule,
     StaffModule,
     JwtModule.registerAsync({
       global: true,

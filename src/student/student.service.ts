@@ -81,4 +81,14 @@ export class StudentService {
     async updateStudentsProfile(regno: string, body: UpdateDTO) {
         const student = await this.studentModel.findByIdAndUpdate({regno}, {body})
     }
+
+    async findOneStudentByRegNoOrEmail(emailOrRegNo: string) {
+        return await this.studentModel.findOne({
+          $or: [
+            { studentReg: emailOrRegNo },
+            { email: emailOrRegNo },
+          ],
+        }).exec();
+      }
+      
 }

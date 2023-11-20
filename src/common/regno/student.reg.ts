@@ -4,13 +4,10 @@ export async function generateRandomCode(leveled: string) {
     }
 
     if (leveled === 'JUNIOR') {
-        const randomCode = `23-TFS-JN-${getRandomNumber()}`;
+        const randomCode = `23/TFS/JN-${getRandomNumber()}`;
         return randomCode;
     } else {
-        const randomCode = `23-TFS-SN-${getRandomNumber()}`;
+        const randomCode = `23/TFS/SN-${getRandomNumber()}`;
         return randomCode;
     }
 }
-
-// const randomCode = generateRandomCode('SENIOR');
-// console.log(randomCode);

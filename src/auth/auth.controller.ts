@@ -3,6 +3,7 @@ import { StaffLoginDto } from 'src/staff/dto/staff.login.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt.guards';
 import { GetUser } from 'src/common/decorator/custom.decorator';
+import { StudentLoginDTO } from 'src/student/dto/login.student.dto';
 
 
 @Controller('auth')
@@ -23,6 +24,10 @@ export class AuthController {
         return user
     }
 
+    @Post('loginstudent')
+    async loginStudent(@Body() body: StudentLoginDTO){
+        return await this.authservice.loginStudent(body)
+    }
     // @Get('profile')
     // @UseGuards(JwtAuthGuard)
     // async currentUserProfile(@Req() req){

@@ -22,19 +22,8 @@ export class StudentController {
         return this.studentService.studentSuspended()
     }
 
-    // @Get('findone/:regno')
-    // async findOneStudentByRegNo(@Param('regno') regno: string){
-    //     const decodedRegistrationNumber = decodeURIComponent(regno);
-
-    //     console.log(decodedRegistrationNumber)
-    //     return await this.studentService.findOneStudentByReNo(decodedRegistrationNumber)
-    // }
-
-    @Get('findone/:regno')
-     async findOneStudentByRegNo(@Param('regno') regno: string) {
-    //  const decodedRegistrationNumber = decodeURIComponent(decodeURI(regno));
-  
-  //  console.log(regno);
+    @Get('findone')
+     async findOneStudentByRegNo(@Body('regno') regno: string) {
   
   return await this.studentService.findOneStudentByReNo(regno);
 }
