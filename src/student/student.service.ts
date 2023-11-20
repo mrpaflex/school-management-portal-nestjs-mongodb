@@ -6,12 +6,12 @@ import { Model } from 'mongoose';
 import { authGeneratePassword } from './authpassword/password.auth';
 import { hashed } from 'src/auth/hashed/password.hashed';
 import { generateRandomCode } from 'src/common/regno/student.reg';
+import { UpdateDTO } from './dto/update.student.dto';
 
 
 @Injectable()
 export class StudentService {
-
-
+    
     constructor(@InjectModel(Student.name)
     private studentModel: Model<Student>
     ){}
@@ -37,12 +37,48 @@ export class StudentService {
     }
 
    async findallstudent() {
-    return await this.studentModel.find()
+    return await this.studentModel.find({
+       // finished: false
+    }).exec()
     }
     async studentSuspended() {
         return await this.studentModel.find({
-            suspended: true
+            suspended: true,
+            finished: false
         })
     }
 
+    async findOneStudentByReNo(regno: string) {
+        console.log(regno)
+       const student= await this.studentModel.findOne({
+        studentReg: regno
+       }).exec()
+       return student
+       
+    }
+
+    async findStudentThatHasNotPayFees() {
+     const studentwithfees = await this.studentModel.find({
+        schoolFees: false,
+        finished: false
+     })
+    }
+
+    async studentsPaidFees() {
+       const nofeesStudents = await this.studentModel.find({
+        schoolFees: true,
+        finished: false
+       })
+    }
+
+    async studentFinishedWithFees() {
+       const finishedStudents = await this.studentModel.find({
+        finished: true,
+        schoolFees: false
+       }) 
+    }
+
+    async updateStudentsProfile(regno: string, body: UpdateDTO) {
+        const student = await this.studentModel.findByIdAndUpdate({regno}, {body})
+    }
 }

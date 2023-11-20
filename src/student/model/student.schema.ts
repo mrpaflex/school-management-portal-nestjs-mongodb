@@ -33,7 +33,7 @@ export class Student extends Document{
     studentReg: string;
 
     @Prop({ type: String, enum: Class})
-    class: Class;
+    current_class: Class;
 
     @Prop()
     leveled: string;
@@ -43,6 +43,9 @@ export class Student extends Document{
 
     @Prop({type: Boolean, default: false})
     suspended: boolean
+
+    @Prop({type: Boolean, default: false})
+    finished: boolean
 
     @Prop({type: Date, default: Date.now})
     date: Date
