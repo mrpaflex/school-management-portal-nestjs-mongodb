@@ -1,4 +1,4 @@
-import { Gender } from "../enum/staff.enum";
+import { Gender } from "../enum/category.enum";
 
 export class UpdateStaffDto{
     firstName: string;

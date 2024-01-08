@@ -1,33 +1,37 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument, Document} from "mongoose";
-import { Gender, StaffEnum } from "../enum/staff.enum";
+import {  Document} from "mongoose";
+import { Category, Gender } from "../enum/category.enum";
+import { Role } from "src/common/enum/role.enum";
 
-//export type StaffDocument = HydratedDocument<Staff>
-@Schema()
+@Schema({timestamps: true})
 export class Staff extends Document {
-    @Prop()
+    @Prop({required: true})
     firstName: string;
 
-    @Prop()
+    @Prop({required: true})
     lastName: string;
 
-    @Prop()
+    @Prop({required: true, unique: true})
     email: string;
 
-    @Prop()
+    @Prop({required: true})
     password: string;
+
+    @Prop({type: String, enum: Role, default: Role.STAFF})
+    roles: Role[];
 
     @Prop({type: String, enum: Gender, default: Gender.FEMALE})
     gender: Gender;
 
-    @Prop({type: String, enum: StaffEnum, default: StaffEnum.NO_TEACHER})
-    staff: StaffEnum;
+
+    @Prop({type: String, enum: Category, required: true})
+    category: Category;
+
+    // @Prop({type: Boolean, default: false})
+    // principal: boolean;
 
     @Prop({type: Boolean, default: false})
-    principal: boolean;
-
-    @Prop({type: Boolean, default: false})
-    principalApproved: boolean;
+    isPrincipal: boolean;
 
     @Prop({type: Boolean, default: false})
     resigned: boolean

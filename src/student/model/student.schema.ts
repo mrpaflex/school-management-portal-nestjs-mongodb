@@ -1,20 +1,21 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 import { Class, Gender, MyLeveled } from "../enum/classes.enum";
+import { Role } from "src/common/enum/role.enum";
 
-@Schema()
+@Schema({timestamps: true})
 export class Student extends Document{
 
-    @Prop()
+    @Prop({required: true})
     firstName: string
 
-    @Prop({default: ''})
+    @Prop({default: null})
     middleName?: string
 
-    @Prop()
+    @Prop({required: true})
     lastName: string
 
-    @Prop()
+    @Prop({required: true, unique: true})
     email: string
 
     @Prop()
@@ -25,6 +26,9 @@ export class Student extends Document{
 
     @Prop()
     age: number
+
+    @Prop({enum: Role, default: Role.STUDENT})
+    roles: Role
 
     @Prop({type: String, enum: Gender})
     gender: Gender
@@ -46,9 +50,6 @@ export class Student extends Document{
 
     @Prop({type: Boolean, default: false})
     finished: boolean
-
-    @Prop({type: Date, default: Date.now})
-    date: Date
 }
 
 export const StudentSchema = SchemaFactory.createForClass(Student)

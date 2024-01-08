@@ -5,6 +5,9 @@ import { UpdateDTO } from './dto/update.student.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { GetUser } from 'src/common/decorator/custom.decorator';
 import { Student } from './model/student.schema';
+import { Roles } from 'src/common/decorator/role.decorator';
+import { Role } from 'src/common/enum/role.enum';
+import { RolesGuard } from 'src/auth/guards/roles/roles.guards';
 
 @Controller('student')
 export class StudentController {
@@ -32,6 +35,9 @@ export class StudentController {
 }
 
     @Get('notpaidfees')
+   
+   @UseGuards(JwtAuthGuard, RolesGuard)
+   @Roles(Role.OWNER, Role.PRINCIPAL)
     async findfeesStudents(){
         return await this.studentService.findStudentThatHasNotPayFees()
     }

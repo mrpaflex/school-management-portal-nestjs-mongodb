@@ -1,14 +1,16 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
-import { Gender, StaffEnum } from "../enum/staff.enum";
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { Category, Gender } from "../enum/category.enum";
 
 export class StaffDto{
     @IsNotEmpty()
+    @IsString()
     @IsEmail()
     email: string;
 
     @IsString()
     @IsNotEmpty()
     password: string
+
     @IsNotEmpty()
     @IsString()
     @MinLength(2,{message: 'fist name must be atleast two charaterz'})
@@ -17,10 +19,15 @@ export class StaffDto{
     @IsNotEmpty()
     @IsString()
     lastName: string;
-
-    gender: Gender
     
-    staff: StaffEnum;
+    @IsNotEmpty()
+    @IsEnum(Category)
+    category: Category
 
-    principal: boolean
+
+    @IsOptional()
+    @IsEnum(Gender)
+    gender: Gender
+
+   
 }

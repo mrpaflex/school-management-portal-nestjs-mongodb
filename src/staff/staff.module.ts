@@ -3,6 +3,7 @@ import { StaffService } from './staff.service';
 import { StaffController } from './staff.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Staff, StaffSchema } from './model/staff.schema';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [

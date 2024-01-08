@@ -26,7 +26,7 @@ export class StudentService {
         input.studentReg = await generateRandomCode(input.leveled)
         console.log(input.studentReg)
         input.password = await authGeneratePassword()
-        console.log(input.password)
+        console.log('your password is', input.password)
 
         input.password = await hashed(input.password)
         const createStudentAccount = await this.studentModel.create({

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { StaffDto } from './dto/staff.dto';
 import { Staff } from './model/staff.schema';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,7 +12,8 @@ export class StaffService {
     private staffModel: Model<Staff>
     ){}
 async createaccount(input: StaffDto) {
-    const staff = await this.staffModel.findOne({ email: input.email })
+    try {
+        const staff = await this.staffModel.findOne({ email: input.email })
     if (staff){
         throw new HttpException('you are a staff already', HttpStatus.UNPROCESSABLE_ENTITY)
     }
@@ -26,6 +27,15 @@ async createaccount(input: StaffDto) {
     await createStaff.save()
 
     return createStaff
+    } catch (error) {
+        if (error instanceof HttpException) {
+            throw error
+            
+        }
+        console.log(error)
+        throw new InternalServerErrorException('server error')
+        
+    }
     }
 
     async updateUser(id: string, updateInput: UpdateStaffDto) {
