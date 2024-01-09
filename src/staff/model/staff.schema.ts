@@ -29,6 +29,11 @@ export class Staff extends Document {
 
     // @Prop({type: Boolean, default: false})
     // principal: boolean;
+    @Prop({default: null})
+    profilePicture?: string;
+
+    @Prop({default: null})
+    cloudinary_id?: string;
 
     @Prop({type: Boolean, default: false})
     isPrincipal: boolean;
