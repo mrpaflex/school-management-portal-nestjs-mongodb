@@ -24,7 +24,7 @@ export class Student extends Document{
     @Prop()
     dateOfBirth: string
 
-    @Prop()
+    @Prop({required: true})
     age: number
 
     @Prop({enum: Role, default: Role.STUDENT})
@@ -36,10 +36,16 @@ export class Student extends Document{
     @Prop()
     studentReg: string;
 
-    @Prop({ type: String, enum: Class})
+    @Prop({default: null})
+    profilePicture?: string;
+
+    @Prop({default: null})
+    cloudinary_id?: string;
+
+    @Prop({ type: String, enum: Class, required: true})
     current_class: Class;
 
-    @Prop()
+    @Prop({type: String, enum: MyLeveled, required: true})
     leveled: string;
 
     @Prop({default: false, type: Boolean})

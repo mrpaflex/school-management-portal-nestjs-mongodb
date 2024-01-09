@@ -22,6 +22,7 @@ import { RolesGuard } from './auth/guards/roles/roles.guards';
     
     StaffModule, StudentModule, AuthModule],
   controllers: [],
+  
   providers: [
     {
       provide: APP_GUARD,

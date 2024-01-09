@@ -7,6 +7,7 @@ import { authGeneratePassword } from './authpassword/password.auth';
 import { hashed } from 'src/auth/hashed/password.hashed';
 import { generateRandomCode } from 'src/common/regno/student.reg';
 import { UpdateDTO } from './dto/update.student.dto';
+import { cloudinary } from 'src/common/cloudinary/cloudinary';
 
 
 @Injectable()
@@ -23,7 +24,7 @@ export class StudentService {
             throw new HttpException('your have account already', HttpStatus.UNPROCESSABLE_ENTITY)
         }
 
-        input.studentReg = await generateRandomCode(input.leveled)
+        input.studentReg = await generateRandomCode(input.leveled, input.current_class)
         console.log(input.studentReg)
         input.password = await authGeneratePassword()
         console.log('your password is', input.password)
@@ -102,5 +103,24 @@ export class StudentService {
       
       async findStudentById(id: string){
         return await this.studentModel.findById(id)
+      }
+
+      async uploadPassport(id: string, file: Express.Multer.File): Promise<string> {
+        console.log(file)
+        try {
+          const result = await cloudinary.uploader.upload(file.path)
+
+             await this.studentModel.findByIdAndUpdate(id, {
+                profilePicture: result.secure_url,
+                cloudinary_id: result.public_id
+            }, {
+                new: true,
+                runValidators: true
+            });
+            return 'passport uploaded successfully';
+
+        } catch (error) {
+          throw new Error('Error uploading to Cloudinary: ' + error.message);
+        }
       }
 }

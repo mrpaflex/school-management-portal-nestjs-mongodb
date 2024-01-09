@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { CreateStudentDTO } from './dto/createStudent.dto';
 import { UpdateDTO } from './dto/update.student.dto';
@@ -8,6 +8,8 @@ import { Student } from './model/student.schema';
 import { Roles } from 'src/common/decorator/role.decorator';
 import { Role } from 'src/common/enum/role.enum';
 import { RolesGuard } from 'src/auth/guards/roles/roles.guards';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { multerOptions } from 'src/common/uploadImages/multer';
 
 @Controller('student')
 export class StudentController {
@@ -30,12 +32,10 @@ export class StudentController {
 
     @Get('findone')
      async findOneStudentByRegNo(@Body('regno') regno: string) {
-  
-  return await this.studentService.findOneStudentByReNo(regno);
+     return await this.studentService.findOneStudentByReNo(regno);
 }
 
     @Get('notpaidfees')
-   
    @UseGuards(JwtAuthGuard, RolesGuard)
    @Roles(Role.OWNER, Role.PRINCIPAL)
     async findfeesStudents(){
@@ -43,11 +43,15 @@ export class StudentController {
     }
 
     @Get('paidfees')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+   @Roles(Role.OWNER, Role.PRINCIPAL)
     async studentPaidFees(){
         return await this.studentService.studentsPaidFees()
     }
 
     @Get('finishedwithfees')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+   @Roles(Role.OWNER, Role.PRINCIPAL)
     async studentsFinishedWithFees(){
         return await this.studentService.studentFinishedWithFees()
     }
@@ -61,5 +65,12 @@ export class StudentController {
     @UseGuards(JwtAuthGuard)
     async updateProfile( @GetUser() input: Student,  @Body() body: UpdateDTO){
         return await this.studentService.updateStudentsProfile(input._id, body)
+    }
+
+    @Put('passport/:id')
+    @UseInterceptors(FileInterceptor('file', multerOptions))
+    async uploadPassport(@Param('id') id: string, @UploadedFile() file: Express.Multer.File){
+        const upload = await this.studentService.uploadPassport(id, file);
+        return upload;
     }
 }
