@@ -18,7 +18,7 @@ export class Student extends Document{
     @Prop({required: true, unique: true})
     email: string
 
-    @Prop()
+    @Prop({required: true})
     password: string
 
     @Prop()
@@ -33,7 +33,7 @@ export class Student extends Document{
     @Prop({type: String, enum: Gender})
     gender: Gender
 
-    @Prop()
+    @Prop({required: true})
     studentReg: string;
 
     @Prop({default: null})

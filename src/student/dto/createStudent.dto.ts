@@ -1,4 +1,4 @@
-import { IsDate, IsEmail, IsEmpty, IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator"
+import { IsDate, IsEmail, IsEmpty, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator"
 import { Class, Gender, MyLeveled } from "../enum/classes.enum"
 
 
@@ -6,7 +6,8 @@ export class CreateStudentDTO{
     @IsNotEmpty()
     firstName: string
 
-    middleName: string
+    @IsOptional()
+    middleName?: string
 
     @IsNotEmpty()
     lastName: string
@@ -14,16 +15,9 @@ export class CreateStudentDTO{
     @IsEmail()
     email: string
 
-    @IsEmpty()
-    password: string
-
     @IsNotEmpty()
     @IsDate()
     dateOfBirth: string
-
-    @IsEmpty()
-    studentReg: string;
-
     @IsNotEmpty()
     @IsNumber()
     age: number

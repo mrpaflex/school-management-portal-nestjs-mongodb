@@ -53,7 +53,18 @@ async createaccount(input: StaffDto) {
 
 
   async findOneStaff(id: string) {
-   return await this.staffModel.findById(id).exec()
+   try {
+    const staff = await this.staffModel.findById(id).exec()
+    if (!staff) {
+     throw new HttpException('staff with such id does not exit', HttpStatus.NOT_FOUND)
+    }
+    return staff
+   } catch (error) {
+    if (error instanceof HttpException) {
+        throw error
+    }
+    throw new InternalServerErrorException('server error while running code', error.message)
+   }
 
 }
 
@@ -64,6 +75,12 @@ async findStaffByEmail(email: string) {
 
 async uploadPassport(id: string, file: Express.Multer.File): Promise<string> {
     try {
+
+    const staff = await this.findOneStaff(id);
+     if (!staff) {
+      throw new HttpException('staff with such id does not exit', HttpStatus.NOT_FOUND)
+     }
+
       const result = await cloudinary.uploader.upload(file.path)
 
          await this.staffModel.findByIdAndUpdate(id, {
@@ -76,6 +93,11 @@ async uploadPassport(id: string, file: Express.Multer.File): Promise<string> {
         return 'passport uploaded successfully';
 
     } catch (error) {
+        
+        if (error instanceof HttpException) {
+            throw error
+        }
+       
       throw new Error('Error uploading to Cloudinary: ' + error.message);
     }
   }

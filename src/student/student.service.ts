@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateStudentDTO } from './dto/createStudent.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Student } from './model/student.schema';
@@ -24,14 +24,21 @@ export class StudentService {
             throw new HttpException('your have account already', HttpStatus.UNPROCESSABLE_ENTITY)
         }
 
-        input.studentReg = await generateRandomCode(input.leveled, input.current_class)
-        console.log(input.studentReg)
-        input.password = await authGeneratePassword()
-        console.log('your password is', input.password)
+        const regNumber= await generateRandomCode(input.leveled, input.current_class);
 
-        input.password = await hashed(input.password)
+        console.log('Your Registration Number is', regNumber);
+
+        const generatedPassword = await authGeneratePassword()
+        console.log('your password is', generatedPassword)
+
+        //hashing the password
+        const hashedPassword = await hashed(generatedPassword)
+
+        
         const createStudentAccount = await this.studentModel.create({
-            ...input
+            ...input,
+            password: hashedPassword,
+            studentReg: regNumber
         })
 
         return createStudentAccount.save()
@@ -106,8 +113,14 @@ export class StudentService {
       }
 
       async uploadPassport(id: string, file: Express.Multer.File): Promise<string> {
-        console.log(file)
+   
         try {
+
+          const student = await this.studentModel.findById(id);
+          if (!student) {
+            throw new HttpException('student with such id not found', HttpStatus.NOT_FOUND)
+          }
+
           const result = await cloudinary.uploader.upload(file.path)
 
              await this.studentModel.findByIdAndUpdate(id, {
@@ -120,7 +133,10 @@ export class StudentService {
             return 'passport uploaded successfully';
 
         } catch (error) {
-          throw new Error('Error uploading to Cloudinary: ' + error.message);
+          if (error instanceof HttpException) {
+            throw error
+          }
+          throw new InternalServerErrorException('Error uploading to Cloudinary: ' + error.message);
         }
       }
 }
