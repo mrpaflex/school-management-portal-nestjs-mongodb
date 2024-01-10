@@ -1,4 +1,5 @@
 
+import { InternalServerErrorException } from '@nestjs/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 const multer = require("multer");
 import { diskStorage } from 'multer';
@@ -7,12 +8,18 @@ import * as path from 'path';
 
    export const  multerOptions: MulterOptions = {
         storage: diskStorage({
+            destination: (req, file, cb) => {
+              const allowedFileTypes = ['.jpg', '.jpeg', '.png', '.pdf'];
+              const ext = path.extname(file.originalname).toLowerCase();
+              if (allowedFileTypes.includes(ext)) {
+                cb(null, 'src/uploads/');
+              }else{
+                return cb(null, 'can be uploaded, wrong file type, although this part of the code is not necessary, because without the code will still run')
+              }
+              
+             },
+       
 
-          //destination: '.src/uploads/',
-          
-          // destination: (req, file, cb) => {
-          //   cb(null, '.src/uploads/');
-          //  },
           filename: (req, file, cb) => {
             const splitFileName = file.originalname.split('.');
             const random = Math.round(Math.random() * 100);
@@ -23,17 +30,23 @@ import * as path from 'path';
         
             cb(null, newFileName);
           },
+
+         
         }),
     
         fileFilter: (req, file, cb) => {
-          const allowedFileTypes = ['.jpg', '.jpeg', '.png'];
+         try {
+          const allowedFileTypes = ['.jpg', '.jpeg', '.png', '.pdf'];
           const ext = path.extname(file.originalname).toLowerCase();
     
-          if (allowedFileTypes.includes(ext)) {
-            cb(null, true);
-          } else {
-            cb(new Error('File type is not supported'), false);
-          }
+          if (!allowedFileTypes.includes(ext)) {
+            return cb(new Error('File type is not supported'), false);
+          } 
+          cb(null, true);
+
+         } catch (error) {
+          throw new InternalServerErrorException('server error while uploading profile')
+         }
         },
       //   limits:{
       //     fileSize: 1000000,///filesize of 1mb
